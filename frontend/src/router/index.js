@@ -35,6 +35,11 @@ Vue.use(VueRouter)
     name: 'Productos',
     component: Productos
   },
+  {
+    path: '/categorias-producto/:categoriaId',
+    name: 'Categoria',
+    component: Productos
+  },
 ]
 
 const router = new VueRouter({

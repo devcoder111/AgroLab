@@ -11,7 +11,6 @@
             <v-data-table
                     :headers="headers"
                     :items="proveedores"
-                    sort-by="calories"
                     class="elevation-1"
                     :search="search"
             >
@@ -30,84 +29,126 @@
                                 vertical
                         ></v-divider>
                         <v-spacer></v-spacer>
-                        <v-dialog v-model="dialog" max-width="600px">
+                        <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
                             <template v-slot:activator="{ on }">
-                                <v-btn color="primary" dark class="mb-2" v-on="on">Nuevo Proveedor</v-btn>
+                                <v-btn color="primary" dark v-on="on">Nuevo Producto</v-btn>
                             </template>
                             <v-card>
-                                <v-card-title>
-                                    <span class="title">{{ formTitle }}</span>
-                                </v-card-title>
-                                <v-divider></v-divider>
-                                <v-card-text>
-                                    <v-container>
-                                        <v-row>
-                                            <v-col cols="12" sm="6" md="6">
-                                                <v-text-field v-model="editedItem.id"
-                                                              hint="ID"
-                                                              solo
-                                                              readonly
-                                                              persistent-hint
-                                                ></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="6">
-                                                <v-text-field v-model="editedItem.nombre"
-                                                              hint="Nombre"
-                                                              solo
-                                                              persistent-hint
-                                                ></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="6">
-                                                <v-text-field v-model="editedItem.direccion"
-                                                              hint="Direccion"
-                                                              solo
-                                                              persistent-hint
-                                                ></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="6">
-                                                <v-text-field v-model="editedItem.telefono"
-                                                              hint="Teléfono"
-                                                              solo
-                                                              persistent-hint
-                                                ></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="6">
-                                                <v-text-field v-model="editedItem.nombre_banco"
-                                                              hint="Banco"
-                                                              solo
-                                                              persistent-hint
-                                                ></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="6">
-                                                <v-text-field v-model="editedItem.no_cuenta"
-                                                              hint="Cuenta"
-                                                              solo
-                                                              persistent-hint
-                                                ></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="6">
-                                                <v-text-field v-model="editedItem.nombre_vendedor"
-                                                              hint="Vendedor"
-                                                              solo
-                                                              persistent-hint
-                                                ></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="6">
-                                                <v-text-field v-model="editedItem.telefono_vendedor"
-                                                              hint="Teléfono Vendedor"
-                                                              solo
-                                                              persistent-hint
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                    </v-container>
-                                </v-card-text>
-
-                                <v-card-actions>
+                                <v-toolbar dark color="primary">
+                                    <v-btn icon dark @click="dialog = false">
+                                        <v-icon>mdi-close</v-icon>
+                                    </v-btn>
+                                    <v-toolbar-title>{{formTitle}}</v-toolbar-title>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-                                    <v-btn color="blue darken-1" text @click="save">Guardar</v-btn>
-                                </v-card-actions>
+                                    <v-toolbar-items>
+                                        <v-btn dark text @click="dialog = false">Guardar</v-btn>
+                                    </v-toolbar-items>
+                                    <v-tabs
+                                            slot="extension"
+                                            centered
+                                            v-model="tabs"
+                                            slider-color="white"
+                                            color="white"
+                                    >
+                                        <v-tab
+                                                v-for="n in nombresTabs"
+                                                :key="n"
+                                        >
+                                            {{ n }}
+                                        </v-tab>
+                                    </v-tabs>
+                                </v-toolbar>
+                                <v-tabs-items v-model="tabs">
+                                    <v-tab-item
+                                            key="1"
+                                    >
+                                        <v-card
+                                                class="mx-8"
+                                        >
+                                            <v-card-text>
+                                                <v-container>
+                                                    <v-row>
+                                                        <v-col cols="12" sm="3" md="2">
+                                                            <v-text-field v-model="editedItem.id"
+                                                                          hint="ID"
+                                                                          solo
+                                                                          readonly
+                                                                          persistent-hint
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="12" sm="9" md="10">
+                                                            <v-text-field v-model="editedItem.nombre"
+                                                                          hint="Nombre"
+                                                                          solo
+                                                                          persistent-hint
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="12" sm="6" md="6">
+                                                            <mapp-categorias></mapp-categorias>
+                                                        </v-col>
+                                                        <v-col cols="12" sm="6" md="6">
+                                                            <v-text-field v-model="editedItem.telefono"
+                                                                          hint="Teléfono"
+                                                                          solo
+                                                                          persistent-hint
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="12" sm="6" md="6">
+                                                            <v-text-field v-model="editedItem.nombre_banco"
+                                                                          hint="Banco"
+                                                                          solo
+                                                                          persistent-hint
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="12" sm="6" md="6">
+                                                            <v-text-field v-model="editedItem.no_cuenta"
+                                                                          hint="Cuenta"
+                                                                          solo
+                                                                          persistent-hint
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="12" sm="6" md="6">
+                                                            <v-text-field v-model="editedItem.nombre_vendedor"
+                                                                          hint="Vendedor"
+                                                                          solo
+                                                                          persistent-hint
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="12" sm="6" md="6">
+                                                            <v-text-field v-model="editedItem.telefono_vendedor"
+                                                                          hint="Teléfono Vendedor"
+                                                                          solo
+                                                                          persistent-hint
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                    </v-row>
+                                                </v-container>
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-tab-item>
+                                    <v-tab-item
+                                            key="2"
+                                    >
+                                        <v-card
+                                                class="mx-8"
+                                        >
+                                            <v-card-text>
+                                                2
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-tab-item>
+                                    <v-tab-item
+                                            key="3"
+                                    >
+                                        <v-card
+                                                class="mx-8"
+                                        >
+                                            <v-card-text>
+                                                3
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-tab-item>
+                                </v-tabs-items>
                             </v-card>
                         </v-dialog>
                     </v-toolbar>
@@ -135,8 +176,8 @@
         <v-snackbar
                 v-model="snackbar"
                 color="error"
-                :right = true
-                :timeout = 6000
+                :right=true
+                :timeout=6000
         >
             ¿Desea eliminar este Item?
             <v-btn
@@ -158,15 +199,20 @@
 
 </template>
 <script>
+    import Categorias from "./Categorias";
     import axios from 'axios';
+
     export default {
         data: () => ({
             //proveedorId : 0,
-            snackbar : false,
+            tab: null,
+            nombresTabs: ['Básico', 'Presentaciones', 'Lotes'],
+            tabs: 0,
+            snackbar: false,
             search: '',
             dialog: false,
             headers: [
-                {text : 'ID', value :'id'},
+                {text: 'ID', value: 'id'},
                 {text: 'Nombre', value: 'nombre',},
                 {text: 'Dirección', value: 'direccion'},
                 {text: 'Teléfono', value: 'telefono'},
@@ -179,7 +225,7 @@
             proveedores: [],
             editedIndex: -1,
             editedItem: {
-                id : '',
+                id: '',
                 nombre: '',
                 direccion: '',
                 telefono: '',
@@ -189,7 +235,7 @@
                 telefono_vendedor: ''
             },
             defaultItem: {
-                id : '',
+                id: '',
                 nombre: '',
                 direccion: '',
                 telefono: '',
@@ -202,7 +248,7 @@
 
         computed: {
             formTitle() {
-                return this.editedIndex === -1 ? 'Nuevo Proveedor' : 'Editar Proveedor'
+                return this.editedIndex === -1 ? 'Nuevo Producto' : 'Editar Producto'
             },
         },
 
@@ -224,9 +270,9 @@
                 axios.get(ruta).then(response => {
                     this.proveedores = response.data
                 })
-                .catch(error => {
-                    console.log(error);
-                });
+                    .catch(error => {
+                        console.log(error);
+                    });
             },
 
             // getProveedor(){
@@ -239,7 +285,7 @@
             //     });
             // },
 
-            confirmarEliminar(item){
+            confirmarEliminar(item) {
                 this.snackbar = true;
                 this.editedItem = Object.assign({}, item)
             },
@@ -276,9 +322,9 @@
                     axios.put(ruta, this.editedItem).then(response => {
                         Object.assign(this.proveedores[this.editedIndex], response.data)
                     })
-                    .catch(error => {
-                        console.log(error);
-                    });
+                        .catch(error => {
+                            console.log(error);
+                        });
                 } else {
                     const ruta = 'http://localhost:8000/api/v1.0/proveedores/'
                     axios.post(ruta, this.editedItem).then((response) => {
@@ -290,5 +336,9 @@
                 this.close()
             },
         },
+
+        components: {
+            mappCategorias: Categorias
+        }
     }
 </script>

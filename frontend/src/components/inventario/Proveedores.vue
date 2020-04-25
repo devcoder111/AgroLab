@@ -90,6 +90,7 @@
                                                               hint="Vendedor"
                                                               solo
                                                               persistent-hint
+
                                                 ></v-text-field>
                                             </v-col>
                                             <v-col cols="12" sm="6" md="6">
