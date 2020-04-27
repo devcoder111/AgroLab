@@ -11,3 +11,8 @@ class Proveedor(models.Model):
 
 class CategoriaProducto(models.Model):
     nombre = models.CharField(max_length=50)
+
+class AccionProducto(models.Model):
+    nombre = models.CharField(max_length=25)
+# class AplicacionesProducto(models.Model):
+#     aplicaciones = models.ArrayField(models.CharField(max_length=25))

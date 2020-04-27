@@ -16,6 +16,7 @@
                 </v-btn>
             </v-col>
             <v-col cols="12" sm="12" md="6" lg="8" class="py-0">
+                {{select}}
                 <v-autocomplete
                         v-model="select"
                         :items="categorias"
@@ -91,18 +92,19 @@
                     id: '',
                     nombre: ''
                 },
-                categorias: {}
+                categorias: []
             }
         },
 
         created() {
-            const ruta = 'http://localhost:8000/api/v1.0/categorias-producto/'
+            const ruta = 'http://localhost:8000/api/v1.0/categoria-producto/'
             axios.get(ruta).then(response => {
                 //this.categorias = Object.values(response.data);
                 // const objectArray = Object.values(response.data);
                 // objectArray.forEach((item) => {
                 //     this.categorias.push(item.nombre);
                 // });
+                console.log(response.data)
                 this.categorias = response.data;
             })
                 .catch(error => {
@@ -144,8 +146,6 @@
                     this.editedItem = this.select
                     this.dialog = true
                 }
-
-
             },
 
             eliminarCategoria() {
@@ -159,12 +159,13 @@
 
             cerrar() {
                 this.editedIndex = -1
+                this.editedItem = this.defaultItem
                 this.dialog = false
             },
 
             guardar() {
                 if (this.editedIndex === -1) {
-                    const ruta = 'http://localhost:8000/api/v1.0/categorias-producto/'
+                    const ruta = 'http://localhost:8000/api/v1.0/categoria-producto/'
                     axios.post(ruta, this.editedItem).then((response) => {
                         this.categorias.push(response.data);
                     }).catch((error) => {
@@ -172,7 +173,7 @@
                     });
 
                 } else if (this.editedIndex === 0) {
-                    const ruta = "http://127.0.0.1:8000/api/v1.0/categorias-producto/" + this.editedItem.id + "/"
+                    const ruta = "http://127.0.0.1:8000/api/v1.0/categoria-producto/" + this.editedItem.id + "/"
                     axios.put(ruta, this.editedItem).then(response => {
                         Object.assign(this.categorias[this.categorias.indexOf(this.editedItem)], response.data)
                     })
@@ -181,7 +182,7 @@
                         });
 
                 } else {
-                    const ruta = "http://localhost:8000/api/v1.0/categorias-producto/" + this.editedItem.id + "/";
+                    const ruta = "http://localhost:8000/api/v1.0/categoria-producto/" + this.editedItem.id + "/";
                     axios.delete(ruta).then((response) => {
                         console.log(response.data);
                     }).catch((error) => {

@@ -87,11 +87,7 @@
                                                             <mapp-categorias></mapp-categorias>
                                                         </v-col>
                                                         <v-col cols="12" sm="6" md="6">
-                                                            <v-text-field v-model="editedItem.telefono"
-                                                                          hint="Teléfono"
-                                                                          solo
-                                                                          persistent-hint
-                                                            ></v-text-field>
+                                                            <mapp-accion-producto></mapp-accion-producto>
                                                         </v-col>
                                                         <v-col cols="12" sm="6" md="6">
                                                             <v-text-field v-model="editedItem.nombre_banco"
@@ -200,6 +196,7 @@
 </template>
 <script>
     import Categorias from "./Categorias";
+    import AccionProducto from "./AccionProducto";
     import axios from 'axios';
 
     export default {
@@ -338,7 +335,8 @@
         },
 
         components: {
-            mappCategorias: Categorias
+            mappCategorias: Categorias,
+            mappAccionProducto : AccionProducto
         }
     }
 </script>
