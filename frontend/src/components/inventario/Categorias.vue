@@ -16,7 +16,6 @@
                 </v-btn>
             </v-col>
             <v-col cols="12" sm="12" md="6" lg="8" class="py-0">
-                {{select}}
                 <v-autocomplete
                         v-model="select"
                         :items="categorias"

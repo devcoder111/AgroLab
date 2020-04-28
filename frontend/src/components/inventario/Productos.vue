@@ -90,32 +90,23 @@
                                                             <mapp-accion-producto></mapp-accion-producto>
                                                         </v-col>
                                                         <v-col cols="12" sm="6" md="6">
-                                                            <v-text-field v-model="editedItem.nombre_banco"
-                                                                          hint="Banco"
-                                                                          solo
-                                                                          persistent-hint
-                                                            ></v-text-field>
+                                                            <mapp-aplicacion-producto></mapp-aplicacion-producto>
                                                         </v-col>
                                                         <v-col cols="12" sm="6" md="6">
-                                                            <v-text-field v-model="editedItem.no_cuenta"
-                                                                          hint="Cuenta"
-                                                                          solo
-                                                                          persistent-hint
-                                                            ></v-text-field>
-                                                        </v-col>
-                                                        <v-col cols="12" sm="6" md="6">
-                                                            <v-text-field v-model="editedItem.nombre_vendedor"
-                                                                          hint="Vendedor"
-                                                                          solo
-                                                                          persistent-hint
-                                                            ></v-text-field>
-                                                        </v-col>
-                                                        <v-col cols="12" sm="6" md="6">
-                                                            <v-text-field v-model="editedItem.telefono_vendedor"
-                                                                          hint="Teléfono Vendedor"
-                                                                          solo
-                                                                          persistent-hint
-                                                            ></v-text-field>
+                                                            <v-btn class="ma-2" fab small dark color="primary"
+                                                                   @click="">
+                                                                <v-icon dark>mdi-plus</v-icon>
+                                                            </v-btn>
+                                                            <v-autocomplete
+                                                                    v-model="proveedor_seleccionado"
+                                                                    :items="proveedores"
+                                                                    :search-input="search_proveedor"
+                                                                    persistent-hint
+                                                                    return-object
+                                                                    item-text="nombre"
+                                                                    hint="Proveedor"
+                                                                    clearable
+                                                            ></v-autocomplete>
                                                         </v-col>
                                                     </v-row>
                                                 </v-container>
@@ -197,16 +188,19 @@
 <script>
     import Categorias from "./Categorias";
     import AccionProducto from "./AccionProducto";
+    import AplicacionProducto from "./AplicacionProducto";
     import axios from 'axios';
 
     export default {
         data: () => ({
             //proveedorId : 0,
+            proveedor_seleccionado: null,
             tab: null,
             nombresTabs: ['Básico', 'Presentaciones', 'Lotes'],
             tabs: 0,
             snackbar: false,
             search: '',
+            search_proveedor: '',
             dialog: false,
             headers: [
                 {text: 'ID', value: 'id'},
@@ -336,7 +330,8 @@
 
         components: {
             mappCategorias: Categorias,
-            mappAccionProducto : AccionProducto
+            mappAccionProducto: AccionProducto,
+            mappAplicacionProducto: AplicacionProducto
         }
     }
 </script>

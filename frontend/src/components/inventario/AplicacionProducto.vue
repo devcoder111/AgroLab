@@ -5,13 +5,13 @@
     >
         <v-row>
             <v-col cols="12" sm="12" md="6" lg="4" class="py-0 text-center">
-                <v-btn class="ma-2" fab small dark color="primary" @click="agregarAccion">
+                <v-btn class="ma-2" fab small dark color="primary" @click="agregarAplicacion">
                     <v-icon dark>mdi-plus</v-icon>
                 </v-btn>
-                <v-btn class="ma-2" fab small dark color="warning" @click="editarAccion">
+                <v-btn class="ma-2" fab small dark color="warning" @click="editarAplicacion">
                     <v-icon dark>mdi-pencil</v-icon>
                 </v-btn>
-                <v-btn class="ma-2" fab small dark color="error" @click="eliminarAccion">
+                <v-btn class="ma-2" fab small dark color="error" @click="eliminarAplicacion">
                     <v-icon dark>mdi-delete</v-icon>
                 </v-btn>
             </v-col>
@@ -23,7 +23,7 @@
                         small-chips
                         multiple
                         persistent-hint
-                        hint="Acciones"
+                        hint="Aplicaciones"
                         return-object
                         item-text="nombre"
                 ></v-autocomplete>
@@ -41,12 +41,12 @@
                     <span
                             v-if="editedIndex === 1"
                             class="subtitle-2">
-                        ¿Está seguro que desea eliminar la acción ?
+                        ¿Está seguro que desea eliminar la aplicación ?
                     </span>
                     <v-text-field
                             v-if="editedIndex != 1"
                             v-model="editedItem.nombre"
-                            hint="Acción"
+                            hint="Aplicación"
                             solo
                             persistent-hint
                     ></v-text-field>
@@ -78,7 +78,7 @@
     import axios from "axios";
 
     export default {
-        name: "AccionProducto",
+        name: "AplicacionProducto",
         data: () => ({
             items: [],
             values: [],
@@ -96,7 +96,7 @@
         }),
 
         created() {
-            const ruta = 'http://localhost:8000/api/v1.0/accion-producto/'
+            const ruta = 'http://localhost:8000/api/v1.0/aplicacion-producto/'
             axios.get(ruta).then(response => {
                 //this.categorias = Object.values(response.data);
                 // const objectArray = Object.values(response.data);
@@ -112,9 +112,9 @@
 
         computed: {
             tituloFormulario() {
-                return this.editedIndex === -1 ? 'Agregar Acción' :
-                    this.editedIndex === 0 ? 'Editar Acción' :
-                        'Eliminar Acción'
+                return this.editedIndex === -1 ? 'Agregar Aplicación' :
+                    this.editedIndex === 0 ? 'Editar Aplicación' :
+                        'Eliminar Aplicaión'
             },
 
             textoGuardar() {
@@ -123,12 +123,12 @@
         },
 
         methods: {
-            agregarAccion() {
+            agregarAplicacion() {
                 this.editedIndex = -1
                 this.editedItem = this.defaultItem
                 this.dialog = true
             },
-            editarAccion() {
+            editarAplicacion() {
                 this.editedIndex = 0
                 if (this.values.length === 1) {
                     this.editedItem = this.values[0]
@@ -136,7 +136,7 @@
                 }
 
             },
-            eliminarAccion() {
+            eliminarAplicacion() {
                 this.editedIndex = 1
                 if (this.values.length === 1){
                     this.editedItem = this.values[0]
@@ -152,14 +152,14 @@
 
             guardar() {
                 if (this.editedIndex === -1) {
-                    const ruta = 'http://localhost:8000/api/v1.0/accion-producto/'
+                    const ruta = 'http://localhost:8000/api/v1.0/aplicacion-producto/'
                     axios.post(ruta, this.editedItem).then((response) => {
                         this.items.push(response.data)
                     }).catch((error) => {
                         console.log(error);
                     });
                 } else if (this.editedIndex === 0) {
-                    const ruta = "http://127.0.0.1:8000/api/v1.0/accion-producto/" + this.editedItem.id + "/"
+                    const ruta = "http://127.0.0.1:8000/api/v1.0/aplicacion-producto/" + this.editedItem.id + "/"
                     axios.put(ruta, this.editedItem).then(response => {
                         Object.assign(this.items[this.items.indexOf(this.editedItem)], response.data)
                     })
@@ -168,7 +168,7 @@
                         });
                     this.values = []
                 } else {
-                    const ruta = "http://localhost:8000/api/v1.0/accion-producto/" + this.editedItem.id + "/";
+                    const ruta = "http://localhost:8000/api/v1.0/aplicacion-producto/" + this.editedItem.id + "/";
                     axios.delete(ruta).then((response) => {
                     }).catch((error) => {
                         console.log(error);
