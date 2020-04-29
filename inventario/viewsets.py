@@ -1,8 +1,18 @@
 from rest_framework import viewsets
 
-from .models import Proveedor, CategoriaProducto, AccionProducto, AplicacionProducto
+from .models import (Proveedor,
+                     CategoriaProducto,
+                     AccionProducto,
+                     AplicacionProducto,
+                     UnidadMedidaProducto,
+                     TipoProducto)
 
-from .serializer import ProveedorSerializer, CategoriaProductoSerializer, AccionProductoSerializer, AplicacionProductoSerializer
+from .serializer import (ProveedorSerializer,
+                         CategoriaProductoSerializer,
+                         AccionProductoSerializer,
+                         AplicacionProductoSerializer,
+                         UnidadMedidaProductoSerializer,
+                         TipoProductoSerializer)
 
 class ProveedorViewSet(viewsets.ModelViewSet):
     queryset = Proveedor.objects.all()
@@ -19,6 +29,16 @@ class AccionProductoViewSet(viewsets.ModelViewSet):
 class AplicacionProductoViewSet(viewsets.ModelViewSet):
     queryset = AplicacionProducto.objects.all()
     serializer_class = AplicacionProductoSerializer
+
+class UnidadMedidaProductoViewSet(viewsets.ModelViewSet):
+    queryset = UnidadMedidaProducto.objects.all()
+    serializer_class = UnidadMedidaProductoSerializer
+
+class TipoProductoViewSet(viewsets.ModelViewSet):
+    queryset = TipoProducto.objects.all()
+    serializer_class = TipoProductoSerializer
+
+
 
 
 # class AplicacionesProductoViewSet(viewsets.ModelViewSet):

@@ -93,10 +93,6 @@
                                                             <mapp-aplicacion-producto></mapp-aplicacion-producto>
                                                         </v-col>
                                                         <v-col cols="12" sm="6" md="6">
-                                                            <v-btn class="ma-2" fab small dark color="primary"
-                                                                   @click="">
-                                                                <v-icon dark>mdi-plus</v-icon>
-                                                            </v-btn>
                                                             <v-autocomplete
                                                                     v-model="proveedor_seleccionado"
                                                                     :items="proveedores"
@@ -105,6 +101,7 @@
                                                                     return-object
                                                                     item-text="nombre"
                                                                     hint="Proveedor"
+                                                                    class="mx-4"
                                                                     clearable
                                                             ></v-autocomplete>
                                                         </v-col>
@@ -120,7 +117,54 @@
                                                 class="mx-8"
                                         >
                                             <v-card-text>
-                                                2
+                                                <v-container>
+                                                    <v-row>
+                                                        <v-col cols="12" sm="12" md="8">
+                                                            <v-text-field
+                                                                    hint="Nombre Presentación"
+                                                                    solo
+                                                                    persistent-hint
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="12" sm="6" md="2">
+                                                            <v-text-field
+                                                                    hint="Precio Compra"
+                                                                    solo
+                                                                    persistent-hint
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="12" sm="6" md="2">
+                                                            <v-text-field
+                                                                    hint="Precio Venta"
+                                                                    solo
+                                                                    persistent-hint
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                        <v-switch class="mx-2"
+                                                                  label="Esta presentación se vende por partes">
+                                                        </v-switch>
+                                                        <v-divider
+                                                                    class="mx-4"
+                                                                    vertical
+                                                            ></v-divider>
+
+                                                    </v-row>
+                                                    <v-row>
+                                                        <v-col cols="12" sm="12" md="5">
+                                                            <mapp-tipo-producto></mapp-tipo-producto>
+                                                        </v-col>
+                                                        <v-col cols="12" sm="12" md="5">
+                                                            <mapp-unidad-medida-producto></mapp-unidad-medida-producto>
+                                                        </v-col>
+                                                        <v-col cols="12" sm="12" md="2">
+                                                            <v-text-field
+                                                                    hint="Cantidad"
+                                                                    solo
+                                                                    persistent-hint
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                    </v-row>
+                                                </v-container>
                                             </v-card-text>
                                         </v-card>
                                     </v-tab-item>
@@ -189,6 +233,8 @@
     import Categorias from "./Categorias";
     import AccionProducto from "./AccionProducto";
     import AplicacionProducto from "./AplicacionProducto";
+    import UnidadDeMedida from "./UnidadDeMedida";
+    import TipoProducto from "./TipoProducto";
     import axios from 'axios';
 
     export default {
@@ -331,7 +377,9 @@
         components: {
             mappCategorias: Categorias,
             mappAccionProducto: AccionProducto,
-            mappAplicacionProducto: AplicacionProducto
+            mappAplicacionProducto: AplicacionProducto,
+            mappUnidadMedidaProducto: UnidadDeMedida,
+            mappTipoProducto : TipoProducto
         }
     }
 </script>

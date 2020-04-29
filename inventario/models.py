@@ -17,5 +17,11 @@ class AccionProducto(models.Model):
 
 class AplicacionProducto(models.Model):
     nombre = models.CharField(max_length=25)
+
+class UnidadMedidaProducto(models.Model):
+    nombre = models.CharField(max_length=25)
+
+class TipoProducto(models.Model):
+    nombre = models.CharField(max_length=25)
 # class AplicacionesProducto(models.Model):
 #     aplicaciones = models.ArrayField(models.CharField(max_length=25))

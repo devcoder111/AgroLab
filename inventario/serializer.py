@@ -1,6 +1,11 @@
 from rest_framework import serializers
 from rest_meets_djongo.serializers import DjongoModelSerializer
-from.models import Proveedor, CategoriaProducto, AccionProducto, AplicacionProducto
+from.models import (Proveedor,
+                    CategoriaProducto,
+                    AccionProducto,
+                    AplicacionProducto,
+                    UnidadMedidaProducto,
+                    TipoProducto)
 
 class ProveedorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,6 +25,16 @@ class AccionProductoSerializer(serializers.ModelSerializer):
 class AplicacionProductoSerializer(serializers.ModelSerializer):
     class Meta:
         model = AplicacionProducto
+        fields = "__all__"
+
+class UnidadMedidaProductoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UnidadMedidaProducto
+        fields = "__all__"
+
+class TipoProductoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TipoProducto
         fields = "__all__"
 
 
