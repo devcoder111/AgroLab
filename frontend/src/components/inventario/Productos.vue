@@ -112,61 +112,17 @@
                                     </v-tab-item>
                                     <v-tab-item
                                             key="2"
+                                            style="background-color: #E8EAF6"
+                                            class="py-4"
                                     >
-                                        <v-card
-                                                class="mx-8"
-                                        >
-                                            <v-card-text>
-                                                <v-container>
-                                                    <v-row>
-                                                        <v-col cols="12" sm="12" md="8">
-                                                            <v-text-field
-                                                                    hint="Nombre Presentación"
-                                                                    solo
-                                                                    persistent-hint
-                                                            ></v-text-field>
-                                                        </v-col>
-                                                        <v-col cols="12" sm="6" md="2">
-                                                            <v-text-field
-                                                                    hint="Precio Compra"
-                                                                    solo
-                                                                    persistent-hint
-                                                            ></v-text-field>
-                                                        </v-col>
-                                                        <v-col cols="12" sm="6" md="2">
-                                                            <v-text-field
-                                                                    hint="Precio Venta"
-                                                                    solo
-                                                                    persistent-hint
-                                                            ></v-text-field>
-                                                        </v-col>
-                                                        <v-switch class="mx-2"
-                                                                  label="Esta presentación se vende por partes">
-                                                        </v-switch>
-                                                        <v-divider
-                                                                    class="mx-4"
-                                                                    vertical
-                                                            ></v-divider>
-
-                                                    </v-row>
-                                                    <v-row>
-                                                        <v-col cols="12" sm="12" md="5">
-                                                            <mapp-tipo-producto></mapp-tipo-producto>
-                                                        </v-col>
-                                                        <v-col cols="12" sm="12" md="5">
-                                                            <mapp-unidad-medida-producto></mapp-unidad-medida-producto>
-                                                        </v-col>
-                                                        <v-col cols="12" sm="12" md="2">
-                                                            <v-text-field
-                                                                    hint="Cantidad"
-                                                                    solo
-                                                                    persistent-hint
-                                                            ></v-text-field>
-                                                        </v-col>
-                                                    </v-row>
-                                                </v-container>
-                                            </v-card-text>
-                                        </v-card>
+                                        <mapp-presentaciones-producto
+                                                v-for="(presentacion, index) in presentaciones"
+                                                :key="index"
+                                                :index="index"
+                                                :datos="presentacion"
+                                                @agregarPresentacion="agregarPresentacion"
+                                                @eliminarPresentacion="eliminarPresentacion(index)"
+                                        ></mapp-presentaciones-producto>
                                     </v-tab-item>
                                     <v-tab-item
                                             key="3"
@@ -233,8 +189,7 @@
     import Categorias from "./Categorias";
     import AccionProducto from "./AccionProducto";
     import AplicacionProducto from "./AplicacionProducto";
-    import UnidadDeMedida from "./UnidadDeMedida";
-    import TipoProducto from "./TipoProducto";
+    import Presentaciones from "./Presentaciones";
     import axios from 'axios';
 
     export default {
@@ -248,6 +203,7 @@
             search: '',
             search_proveedor: '',
             dialog: false,
+            presentaciones: [],
             headers: [
                 {text: 'ID', value: 'id'},
                 {text: 'Nombre', value: 'nombre',},
@@ -300,9 +256,9 @@
             //this.getProveedor()
             //this.proveedorId = this.$route.params.proveedorId;
         },
-
         methods: {
             initialize() {
+                this.agregarPresentacion()
                 const ruta = 'http://localhost:8000/api/v1.0/proveedores/'
                 axios.get(ruta).then(response => {
                     this.proveedores = response.data
@@ -310,6 +266,21 @@
                     .catch(error => {
                         console.log(error);
                     });
+            },
+
+            agregarPresentacion() {
+                this.presentaciones.push({
+                        "nombre": '',
+                        'precio_compra': '',
+                        'precio_venta': ''
+                    },
+                );
+            },
+
+            eliminarPresentacion(index) {
+                if (this.presentaciones.length > 1){
+                    this.presentaciones.splice(index, 1);
+                }
             },
 
             // getProveedor(){
@@ -378,8 +349,7 @@
             mappCategorias: Categorias,
             mappAccionProducto: AccionProducto,
             mappAplicacionProducto: AplicacionProducto,
-            mappUnidadMedidaProducto: UnidadDeMedida,
-            mappTipoProducto : TipoProducto
+            mappPresentacionesProducto: Presentaciones
         }
     }
 </script>
