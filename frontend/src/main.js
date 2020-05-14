@@ -105,7 +105,8 @@ const store = new Vuex.Store({
                 nombre: '',
                 precio_compra: '',
                 precio_venta: '',
-                detalle_unitario: []
+                detalle_unitario: [],
+                lotes : []
             })
         },
 
@@ -114,7 +115,8 @@ const store = new Vuex.Store({
                 nombre: '',
                 precio_compra: '',
                 precio_venta: '',
-                detalle_unitario: []
+                detalle_unitario: [],
+                lotes : []
             })
         },
 
@@ -191,6 +193,27 @@ const store = new Vuex.Store({
         setPrecioUnidadSubPresentacion(state, value){
             state.producto.presentaciones[value.index_presentacion].detalle_unitario[value.index]
                 .precio_unidad = parseInt(value.precio_unidad)
+        },
+
+        agregarLoteVacio(state, value){
+            state.producto.presentaciones[value.index].lotes.push({
+                existencia : ''
+            })
+        },
+
+        setFechaVencimientoLote(state, value){
+            state.producto.presentaciones[value.index_presentacion]
+                .lotes[value.index].fecha_vencimiento = value.fecha_vencimiento
+        },
+
+        deleteFechaFencimientoLote(state, value){
+            delete state.producto.presentaciones[value.index_presentacion]
+                .lotes[value.index].fecha_vencimiento
+        },
+
+        setExistenciaLote(state, value){
+            state.producto.presentaciones[value.index_presentacion]
+                .lotes[value.index].existencia = value.existencia
         }
     }
 })

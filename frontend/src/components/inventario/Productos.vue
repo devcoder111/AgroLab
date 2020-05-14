@@ -78,13 +78,8 @@
                                     <v-tab-item
                                             key="3"
                                     >
-                                        <v-card
-                                                class="mx-8"
-                                        >
-                                            <v-card-text>
                                                 <mapp-lotes></mapp-lotes>
-                                            </v-card-text>
-                                        </v-card>
+
                                     </v-tab-item>
                                 </v-tabs-items>
                             </v-card>

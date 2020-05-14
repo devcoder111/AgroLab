@@ -1,13 +1,29 @@
 <template>
-    <mapp-lote></mapp-lote>
+    <v-card
+    >
+        <v-card-text>
+            <mapp-lote
+                    v-for="(presentacion, index) in presentaciones"
+                    :key="index"
+                    :presentacion="presentacion"
+                    :index="index"
+            ></mapp-lote>
+        </v-card-text>
+    </v-card>
 </template>
 
 <script>
     import Lote from "./Lote";
+
     export default {
         name: "Lotes",
-        components : {
-            mappLote : Lote
+        computed: {
+            presentaciones() {
+                return this.$store.state.producto.presentaciones
+            }
+        },
+        components: {
+            mappLote: Lote
         }
     }
 </script>

@@ -3,25 +3,24 @@
             class="mx-8 my-4"
     >
         <v-card-text>
-            {{presentaciones}}
             <v-container>
-                <span class="title">Fecha de Vencimiento</span> {{picker}}
                 <v-row>
-                    <v-col cols="12" sm="12" md="10">
-                        <v-date-picker
-                                v-model="picker"
-                                landscape
-                                full-width
-                        ></v-date-picker>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="2">
-                        <v-text-field
-                                hint="Existencia"
-                                solo
-                                persistent-hint
-                        ></v-text-field>
-                    </v-col>
+                    <v-text-field
+                            v-model="presentacion.nombre"
+                            hint="Nombre Presentacion"
+                            solo
+                            readonly
+                            persistent-hint
+                    ></v-text-field>
                 </v-row>
+                <mapp-sub-lote
+                        v-for="(sub,index) in subLotes"
+                        :key="index"
+                        :lote="sub"
+                        :index="index"
+                        :index_presentacion="index_presentacion"
+                    ></mapp-sub-lote>
+
             </v-container>
         </v-card-text>
         <v-card-actions>
@@ -42,19 +41,29 @@
 </template>
 
 <script>
+    import SubLote from './SubLote'
+
     export default {
         name: "Lote",
-        props: ['datos', 'index'],
+        props: ['presentacion', 'index'],
         data() {
-            return {
-                picker: new Date().toISOString().substr(0, 10)
+            return {}
+        },
+
+        computed: {
+            subLotes() {
+              return this.$store.state.producto.presentaciones[this.index].lotes
+            },
+            index_presentacion(){
+                return this.$store.state.producto.presentaciones.indexOf(this.presentacion)
             }
         },
 
-        computed : {
-            presentaciones(){
-                return this.$store.state.producto.presentaciones
-            }
+        created() {
+            this.$store.commit('agregarLoteVacio', {index: this.index})
+        },
+        components: {
+            mappSubLote: SubLote
         }
     }
 </script>
