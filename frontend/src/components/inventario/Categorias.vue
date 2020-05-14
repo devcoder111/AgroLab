@@ -79,9 +79,9 @@
     export default {
         data() {
             return {
+                select : null,
                 dialog: false,
                 search: null,
-                select: null,
                 editedIndex: -1,
                 editedItem: {
                     id: '',
@@ -120,7 +120,7 @@
 
             textoGuardar() {
                 return this.editedIndex === 1 ? "Sí, Eliminar" : "Guardar"
-            }
+            },
         },
 
         watch: {
@@ -130,10 +130,19 @@
 
             select() {
                 this.select != null ? this.editedItem = this.select : this.editedItem = this.defaultItem
+                if (this.select != null){
+                    this.setCategoria(this.select)
+                }else{
+                    this.setCategoria({nombre:''})
+                }
             }
         },
 
         methods: {
+            setCategoria(categoria){
+              this.$store.commit('setCategoriaProducto',categoria)
+            },
+
             agregarCategoria() {
                 this.editedItem = this.defaultItem
                 this.dialog = true
@@ -167,6 +176,7 @@
                     const ruta = 'http://localhost:8000/api/v1.0/categoria-producto/'
                     axios.post(ruta, this.editedItem).then((response) => {
                         this.categorias.push(response.data);
+                        this.select = null
                     }).catch((error) => {
                         console.log(error);
                     });

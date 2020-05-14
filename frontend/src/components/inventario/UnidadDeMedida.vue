@@ -75,7 +75,6 @@
 </template>
 <script>
     import axios from "axios";
-
     export default {
         data() {
             return {
@@ -130,6 +129,17 @@
 
             select() {
                 this.select != null ? this.editedItem = this.select : this.editedItem = this.defaultItem
+                if (this.select != null){
+                    this.$emit('getDato', this.select.nombre)
+                    // this.$store.commit(
+                    //     'setUnidadMedidaPresentacion',
+                    //     {index : this.index, unidad_medida : this.select.nombre})
+                }else{
+                    this.$emit('getDato', '')
+                    // this.$store.commit(
+                    //     'setUnidadMedidaPresentacion',
+                    //     {index : this.index, unidad_medida : ''})
+                }
             }
         },
 

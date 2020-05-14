@@ -26,6 +26,7 @@
                         hint="Acciones"
                         return-object
                         item-text="nombre"
+                        @change="setAcciones(values)"
                 ></v-autocomplete>
             </v-col>
         </v-row>
@@ -81,8 +82,8 @@
         name: "AccionProducto",
         data: () => ({
             items: [],
-            values: [],
             value: null,
+            values : [],
             dialog: false,
             defaultItem: {
                 id: '',
@@ -119,10 +120,23 @@
 
             textoGuardar() {
                 return this.editedIndex === 1 ? 'Sí, Eliminar' : "Guardar"
-            }
+            },
+
+            // acciones : {
+            //     get(){
+            //         return this.$store.state.producto.acciones
+            //     },
+            //     set(value){
+            //         this.$store.commit('setAccionesProducto',value)
+            //     }
+            // },
         },
 
         methods: {
+            setAcciones(acciones){
+              this.$store.commit('setAccionesProducto',acciones)
+            },
+
             agregarAccion() {
                 this.editedIndex = -1
                 this.editedItem = this.defaultItem
@@ -167,6 +181,7 @@
                             console.log(error);
                         });
                     this.values = []
+                    this.setAcciones([])
                 } else {
                     const ruta = "http://localhost:8000/api/v1.0/accion-producto/" + this.editedItem.id + "/";
                     axios.delete(ruta).then((response) => {
@@ -176,6 +191,8 @@
                     });
                     const index = this.items.indexOf(this.editedItem)
                     this.items.splice(index, 1)
+                    this.values = []
+                    this.setAcciones([])
                 }
                 this.editedIndex = -1
                 this.editedItem = this.defaultItem

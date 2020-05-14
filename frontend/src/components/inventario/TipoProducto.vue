@@ -77,6 +77,7 @@
     import axios from "axios";
 
     export default {
+        props : ['index'],
         data() {
             return {
                 dialog: false,
@@ -130,10 +131,24 @@
 
             select() {
                 this.select != null ? this.editedItem = this.select : this.editedItem = this.defaultItem
+                if (this.select != null){
+                    this.$store.commit(
+                        'setTipoProductoPresentacion',
+                        {index : this.index, tipo_producto : this.select.nombre})
+                }else{
+                    this.$store.commit(
+                        'setTipoProductoPresentacion',
+                        {index : this.index, tipo_producto : ''})
+                }
             }
         },
 
         methods: {
+
+            setTipoProducto(value){
+                this.$store.commit('setTipoProductoPresentacion', value)
+            },
+
             agregarTipoProducto() {
                 this.editedItem = this.defaultItem
                 this.dialog = true

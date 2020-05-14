@@ -26,6 +26,7 @@
                         hint="Aplicaciones"
                         return-object
                         item-text="nombre"
+                        @change="setAplicaciones(values)"
                 ></v-autocomplete>
             </v-col>
         </v-row>
@@ -81,7 +82,7 @@
         name: "AplicacionProducto",
         data: () => ({
             items: [],
-            values: [],
+            values : [],
             value: null,
             dialog: false,
             defaultItem: {
@@ -119,10 +120,15 @@
 
             textoGuardar() {
                 return this.editedIndex === 1 ? 'Sí, Eliminar' : "Guardar"
-            }
+            },
+
         },
 
         methods: {
+            setAplicaciones(aplicaciones){
+                this.$store.commit('setAplicacionesProducto', aplicaciones)
+            },
+
             agregarAplicacion() {
                 this.editedIndex = -1
                 this.editedItem = this.defaultItem
@@ -167,14 +173,18 @@
                             console.log(error);
                         });
                     this.values = []
+                    this.setAplicaciones([])
                 } else {
                     const ruta = "http://localhost:8000/api/v1.0/aplicacion-producto/" + this.editedItem.id + "/";
                     axios.delete(ruta).then((response) => {
+                        console.log(response);
                     }).catch((error) => {
                         console.log(error);
                     });
                     const index = this.items.indexOf(this.editedItem)
                     this.items.splice(index, 1)
+                    this.values = []
+                    this.setAplicaciones([])
                 }
                 this.editedIndex = -1
                 this.editedItem = this.defaultItem

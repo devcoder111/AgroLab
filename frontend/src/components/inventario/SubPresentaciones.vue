@@ -5,13 +5,19 @@
             <v-container fluid>
                 <v-row>
                     <v-col cols="12" sm="12" md="5">
-                        <mapp-tipo-producto></mapp-tipo-producto>
+                        <mapp-tipo-producto
+                                :index="index"
+                        ></mapp-tipo-producto>
                     </v-col>
                     <v-col cols="12" sm="12" md="5">
-                        <mapp-unidad-medida></mapp-unidad-medida>
+                        <mapp-unidad-medida
+                                :index="index"
+                                @getDato="setUnidadMedida"
+                        ></mapp-unidad-medida>
                     </v-col>
                     <v-col cols="12" sm="12" md="2">
                         <v-text-field
+                                v-model="cantidad_medida"
                                 hint="Cantidad"
                                 solo
                                 persistent-hint
@@ -23,12 +29,11 @@
                         </v-card-title>
                         <v-card-text>
                             <mapp-sub-presentacion
-                                    v-for="(sub, index) in subPresentaciones"
-                                    :key="index"
-                                    :index="index"
-                                    :datos="sub"
-                                    @agregarSubPresentacion="agregarSubPresentacion"
-                                    @eliminarSubPresentacion="eliminarSubPresentacion(index)"
+                                    v-for="(sub, i) in sub_presentaciones"
+                                    :key="i"
+                                    :index_presentacion="index"
+                                    :index="i"
+                                    :item="sub"
                             ></mapp-sub-presentacion>
                         </v-card-text>
                     </v-card>
@@ -44,20 +49,36 @@
     import SubPresentacion from "./SubPresentacion";
 
     export default {
+        props: ['index'],
         name: "SubPresentaciones",
         data() {
             return {
-                subPresentaciones: [],
+                cantidad_medida: ''
             }
         },
 
         created() {
-            this.subPresentaciones.push({
-                    nombre: '',
-                    unidadMedida: '',
-                    cantidad: 0,
-                    precioUnitario: 0
-                })
+            //this.$store.commit('setDetalleUnitarioPresentacion', {index : this.index})
+        },
+
+        computed: {
+            sub_presentaciones: {
+                get() {
+                    return this.$store.state.producto.presentaciones[this.index].detalle_unitario
+                }
+            }
+        },
+
+        watch: {
+            cantidad_medida() {
+                if (this.cantidad_medida != '') {
+                    this.$store.commit('setCantidadMedidaPresentacion',
+                        {index: this.index, cantidad_medida: this.cantidad_medida})
+                } else {
+                    this.$store.commit('setCantidadMedidaPresentacion',
+                        {index: this.index, cantidad_medida: this.cantidad_medida})
+                }
+            }
         },
 
         methods: {
@@ -70,9 +91,15 @@
                 })
             },
             eliminarSubPresentacion(index) {
-                if(this.subPresentaciones.length > 1)
-                    this.subPresentaciones.splice(index,1)
-            }
+                if (this.subPresentaciones.length > 1)
+                    this.subPresentaciones.splice(index, 1)
+            },
+
+            setUnidadMedida(e) {
+                this.$store.commit(
+                    'setUnidadMedidaPresentacion',
+                    {index: this.index, unidad_medida: e})
+            },
         },
         components: {
             mappTipoProducto: TipoProducto,

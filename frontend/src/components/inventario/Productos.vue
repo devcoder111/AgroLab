@@ -62,53 +62,7 @@
                                     <v-tab-item
                                             key="1"
                                     >
-                                        <v-card
-                                                class="mx-8"
-                                        >
-                                            <v-card-text>
-                                                <v-container>
-                                                    <v-row>
-                                                        <v-col cols="12" sm="3" md="2">
-                                                            <v-text-field v-model="editedItem.id"
-                                                                          hint="ID"
-                                                                          solo
-                                                                          readonly
-                                                                          persistent-hint
-                                                            ></v-text-field>
-                                                        </v-col>
-                                                        <v-col cols="12" sm="9" md="10">
-                                                            <v-text-field v-model="editedItem.nombre"
-                                                                          hint="Nombre"
-                                                                          solo
-                                                                          persistent-hint
-                                                            ></v-text-field>
-                                                        </v-col>
-                                                        <v-col cols="12" sm="6" md="6">
-                                                            <mapp-categorias></mapp-categorias>
-                                                        </v-col>
-                                                        <v-col cols="12" sm="6" md="6">
-                                                            <mapp-accion-producto></mapp-accion-producto>
-                                                        </v-col>
-                                                        <v-col cols="12" sm="6" md="6">
-                                                            <mapp-aplicacion-producto></mapp-aplicacion-producto>
-                                                        </v-col>
-                                                        <v-col cols="12" sm="6" md="6">
-                                                            <v-autocomplete
-                                                                    v-model="proveedor_seleccionado"
-                                                                    :items="proveedores"
-                                                                    :search-input="search_proveedor"
-                                                                    persistent-hint
-                                                                    return-object
-                                                                    item-text="nombre"
-                                                                    hint="Proveedor"
-                                                                    class="mx-4"
-                                                                    clearable
-                                                            ></v-autocomplete>
-                                                        </v-col>
-                                                    </v-row>
-                                                </v-container>
-                                            </v-card-text>
-                                        </v-card>
+                                        <mapp-datos-producto></mapp-datos-producto>
                                     </v-tab-item>
                                     <v-tab-item
                                             key="2"
@@ -119,9 +73,6 @@
                                                 v-for="(presentacion, index) in presentaciones"
                                                 :key="index"
                                                 :index="index"
-                                                :datos="presentacion"
-                                                @agregarPresentacion="agregarPresentacion"
-                                                @eliminarPresentacion="eliminarPresentacion(index)"
                                         ></mapp-presentaciones-producto>
                                     </v-tab-item>
                                     <v-tab-item
@@ -131,7 +82,7 @@
                                                 class="mx-8"
                                         >
                                             <v-card-text>
-                                                3
+                                                <mapp-lotes></mapp-lotes>
                                             </v-card-text>
                                         </v-card>
                                     </v-tab-item>
@@ -156,7 +107,7 @@
                     </v-icon>
                 </template>
                 <template v-slot:no-data>
-                    <v-btn color="primary" @click="initialize">Resetear</v-btn>
+                    <v-btn color="primary">Resetear</v-btn>
                 </template>
             </v-data-table>
         </v-card>
@@ -186,16 +137,15 @@
 
 </template>
 <script>
-    import Categorias from "./Categorias";
-    import AccionProducto from "./AccionProducto";
-    import AplicacionProducto from "./AplicacionProducto";
+    import DatosProducto from "./DatosProducto";
     import Presentaciones from "./Presentaciones";
+    import Lotes from "./Lotes";
     import axios from 'axios';
 
     export default {
         data: () => ({
             //proveedorId : 0,
-            proveedor_seleccionado: null,
+
             tab: null,
             nombresTabs: ['Básico', 'Presentaciones', 'Lotes'],
             tabs: 0,
@@ -203,7 +153,6 @@
             search: '',
             search_proveedor: '',
             dialog: false,
-            presentaciones: [],
             headers: [
                 {text: 'ID', value: 'id'},
                 {text: 'Nombre', value: 'nombre',},
@@ -243,46 +192,27 @@
             formTitle() {
                 return this.editedIndex === -1 ? 'Nuevo Producto' : 'Editar Producto'
             },
+
+            presentaciones: {
+                get() {
+                    return this.$store.state.producto.presentaciones
+                },
+            }
         },
 
         watch: {
             dialog(val) {
                 val || this.close()
             },
+            
         },
 
         created() {
-            this.initialize()
+            this.$store.commit('setPresentacionInicial')
             //this.getProveedor()
             //this.proveedorId = this.$route.params.proveedorId;
         },
         methods: {
-            initialize() {
-                this.agregarPresentacion()
-                const ruta = 'http://localhost:8000/api/v1.0/proveedores/'
-                axios.get(ruta).then(response => {
-                    this.proveedores = response.data
-                })
-                    .catch(error => {
-                        console.log(error);
-                    });
-            },
-
-            agregarPresentacion() {
-                this.presentaciones.push({
-                        "nombre": '',
-                        'precio_compra': '',
-                        'precio_venta': ''
-                    },
-                );
-            },
-
-            eliminarPresentacion(index) {
-                if (this.presentaciones.length > 1){
-                    this.presentaciones.splice(index, 1);
-                }
-            },
-
             // getProveedor(){
             //   const ruta = "http://127.0.0.1:8000/api/v1.0/proveedores/${this.proveedorId}"
             //     axios.get(ruta).then(response => {
@@ -292,6 +222,8 @@
             //        console.log(error);
             //     });
             // },
+
+
 
             confirmarEliminar(item) {
                 this.snackbar = true;
@@ -346,10 +278,9 @@
         },
 
         components: {
-            mappCategorias: Categorias,
-            mappAccionProducto: AccionProducto,
-            mappAplicacionProducto: AplicacionProducto,
-            mappPresentacionesProducto: Presentaciones
+            mappDatosProducto: DatosProducto,
+            mappPresentacionesProducto: Presentaciones,
+            mappLotes: Lotes
         }
     }
 </script>
