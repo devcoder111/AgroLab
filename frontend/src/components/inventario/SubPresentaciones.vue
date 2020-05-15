@@ -51,32 +51,22 @@
     export default {
         props: ['index'],
         name: "SubPresentaciones",
-        data() {
-            return {
-                cantidad_medida: ''
-            }
-        },
-
         created() {
             //this.$store.commit('setDetalleUnitarioPresentacion', {index : this.index})
         },
-
         computed: {
             sub_presentaciones: {
                 get() {
                     return this.$store.state.producto.presentaciones[this.index].detalle_unitario
                 }
-            }
-        },
-
-        watch: {
-            cantidad_medida() {
-                if (this.cantidad_medida != '') {
+            },
+            cantidad_medida: {
+                get() {
+                    return this.$store.state.producto.presentaciones[this.index].medidas.cantidad_medida
+                },
+                set(value) {
                     this.$store.commit('setCantidadMedidaPresentacion',
-                        {index: this.index, cantidad_medida: this.cantidad_medida})
-                } else {
-                    this.$store.commit('setCantidadMedidaPresentacion',
-                        {index: this.index, cantidad_medida: this.cantidad_medida})
+                        {index: this.index, cantidad_medida: value})
                 }
             }
         },

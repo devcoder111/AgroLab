@@ -103,20 +103,26 @@ const store = new Vuex.Store({
             state.producto.presentaciones = []
             state.producto.presentaciones.push({
                 nombre: '',
-                precio_compra: '',
-                precio_venta: '',
+                precio_compra: 0,
+                precio_venta: 0,
                 detalle_unitario: [],
-                lotes : []
+                lotes : [],
+                medidas : {
+                    cantidad_medida : 0
+                }
             })
         },
 
         agregarPresentacionVacia(state) {
             state.producto.presentaciones.push({
                 nombre: '',
-                precio_compra: '',
-                precio_venta: '',
+                precio_compra: 0,
+                precio_venta: 0,
                 detalle_unitario: [],
-                lotes : []
+                lotes : [],
+                medidas : {
+                    cantidad_medida: 0
+                }
             })
         },
 
@@ -133,11 +139,13 @@ const store = new Vuex.Store({
         },
 
         setPrecioCompraPresentacion(state, value) {
-            state.producto.presentaciones[value.index].precio_compra = value.precio_compra
+            var p_compra = parseFloat(value.precio_compra)
+            state.producto.presentaciones[value.index].precio_compra = p_compra
         },
 
         setPrecioVentaPresentacion(state, value) {
-            state.producto.presentaciones[value.index].precio_venta = value.precio_venta
+            var p_venta = parseFloat(value.precio_venta)
+            state.producto.presentaciones[value.index].precio_venta = p_venta
         },
 
         setMedidasPresentacion(state, value) {
@@ -157,7 +165,8 @@ const store = new Vuex.Store({
         },
 
         setCantidadMedidaPresentacion(state, value) {
-            state.producto.presentaciones[value.index].medidas.cantidad_medida = value.cantidad_medida
+            var c_medida = parseFloat(value.cantidad_medida)
+            state.producto.presentaciones[value.index].medidas.cantidad_medida =  c_medida
         },
 
         agregarSubPresentacion(state, value) {

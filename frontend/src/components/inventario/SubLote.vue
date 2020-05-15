@@ -63,7 +63,7 @@
         computed: {
             existencia: {
                 get() {
-                    this.$store.state.producto.presentaciones[this.index_presentacion]
+                    return this.$store.state.producto.presentaciones[this.index_presentacion]
                         .lotes[this.index].existencia
                 },
                 set(value) {

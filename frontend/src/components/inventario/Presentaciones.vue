@@ -91,7 +91,11 @@
 
             precio_compra : {
                 get(){
-                    return this.$store.state.producto.presentaciones[this.index].precio_compra
+                    var precio_compra = this.$store.state.producto.presentaciones[this.index].precio_compra
+                    if (isNaN(precio_compra))
+                        return ''
+                    else
+                        return parseFloat(precio_compra)
                 },
                 set(value){
                     this.$store.commit(
@@ -102,7 +106,11 @@
 
             precio_venta : {
                 get(){
-                    return this.$store.state.producto.presentaciones[this.index].precio_venta
+                    var precio_venta = this.$store.state.producto.presentaciones[this.index].precio_venta
+                    if(isNaN(precio_venta))
+                        return ''
+                    else
+                        return precio_venta
                 },
                 set(value){
                     this.$store.commit(
@@ -115,11 +123,9 @@
         watch :{
           sub_presentaciones(){
               if (this.sub_presentaciones){
-                  this.$store.commit('setMedidasPresentacion',{index : this.index, medidas : {}})
                   this.$store.commit('agregarSubPresentacion',
                       {index: this.index})
               }else{
-                  this.$store.commit('eliminarMedidasPresentacion', {index : this.index})
                   this.$store.commit('eliminarSubPresentaciones',{index : this.index})
               }
           }
