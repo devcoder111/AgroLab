@@ -26,7 +26,6 @@
                         hint="Aplicaciones"
                         return-object
                         item-text="nombre"
-                        @change="setAplicaciones(values)"
                 ></v-autocomplete>
             </v-col>
         </v-row>
@@ -82,7 +81,7 @@
         name: "AplicacionProducto",
         data: () => ({
             items: [],
-            values : [],
+            values: [],
             value: null,
             dialog: false,
             defaultItem: {
@@ -105,6 +104,13 @@
                 //     this.categorias.push(item.nombre);
                 // });
                 this.items = response.data;
+                var aplicaciones = this.$store.state.producto.aplicaciones
+                if (aplicaciones.length > 0) {
+                    for (var i = 0; i < aplicaciones.length; i++) {
+                        this.values.push(this.items.filter(obj => obj.nombre === aplicaciones[i])[0])
+                    }
+                }
+
             })
                 .catch(error => {
                     console.log(error);
@@ -124,10 +130,13 @@
 
         },
 
-        methods: {
-            setAplicaciones(aplicaciones){
-                this.$store.commit('setAplicacionesProducto', aplicaciones)
+        watch: {
+            values: function (val) {
+                this.$store.commit('setAplicacionesProducto', val)
             },
+        },
+
+        methods: {
 
             agregarAplicacion() {
                 this.editedIndex = -1
@@ -144,7 +153,7 @@
             },
             eliminarAplicacion() {
                 this.editedIndex = 1
-                if (this.values.length === 1){
+                if (this.values.length === 1) {
                     this.editedItem = this.values[0]
                     this.dialog = true
                 }

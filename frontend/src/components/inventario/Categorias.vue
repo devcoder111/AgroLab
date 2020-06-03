@@ -17,7 +17,7 @@
             </v-col>
             <v-col cols="12" sm="12" md="6" lg="8" class="py-0">
                 <v-autocomplete
-                        v-model="select"
+                        v-model="value"
                         :items="categorias"
                         :search-input="search"
                         persistent-hint
@@ -75,11 +75,11 @@
 </template>
 <script>
     import axios from "axios";
-
     export default {
         data() {
             return {
-                select : null,
+                value : null,
+                categorias: [],
                 dialog: false,
                 search: null,
                 editedIndex: -1,
@@ -91,20 +91,18 @@
                     id: '',
                     nombre: ''
                 },
-                categorias: []
+
             }
         },
 
         created() {
             const ruta = 'http://localhost:8000/api/v1.0/categoria-producto/'
             axios.get(ruta).then(response => {
-                //this.categorias = Object.values(response.data);
-                // const objectArray = Object.values(response.data);
-                // objectArray.forEach((item) => {
-                //     this.categorias.push(item.nombre);
-                // });
-                console.log(response.data)
                 this.categorias = response.data;
+                var categoria = this.$store.state.producto.categoria
+                if (categoria.length > 0){
+                    this.value = this.categorias.filter(cat => cat.nombre === categoria)[0]
+                }
             })
                 .catch(error => {
                     console.log(error);
@@ -125,42 +123,38 @@
 
         watch: {
             search(val) {
-                val && val !== this.select && this.querySelections(val)
+                val && val !== this.value && this.querySelections(val)
             },
 
-            select() {
-                this.select != null ? this.editedItem = this.select : this.editedItem = this.defaultItem
-                if (this.select != null){
-                    this.setCategoria(this.select)
-                }else{
-                    this.setCategoria({nombre:''})
+            value() {
+                if (this.value != null){
+                    this.editedItem = this.value
+                    this.$store.commit('setCategoriaProducto', this.value)
+                }
+                else{
+                    this.editedItem = this.defaultItem
+                    this.$store.commit('setCategoriaProducto', {nombre: ''})
                 }
             }
         },
 
         methods: {
-            setCategoria(categoria){
-              this.$store.commit('setCategoriaProducto',categoria)
-            },
-
             agregarCategoria() {
-                this.editedItem = this.defaultItem
+                this.editedItem = {id: '', nombre: ''}
                 this.dialog = true
             },
 
             editarCategoria() {
                 this.editedIndex = 0
-                if (this.select != null) {
-                    this.editedItem = this.select
+                if (this.value != null) {
                     this.dialog = true
                 }
             },
 
             eliminarCategoria() {
                 // el número 1 en editedItem indica que se a a eliminar el elemento
-                if (this.select != null) {
+                if (this.value != null) {
                     this.editedIndex = 1
-                    this.editedItem = this.select
                     this.dialog = true
                 }
             },
@@ -176,20 +170,19 @@
                     const ruta = 'http://localhost:8000/api/v1.0/categoria-producto/'
                     axios.post(ruta, this.editedItem).then((response) => {
                         this.categorias.push(response.data);
-                        this.select = null
                     }).catch((error) => {
                         console.log(error);
                     });
-
                 } else if (this.editedIndex === 0) {
                     const ruta = "http://127.0.0.1:8000/api/v1.0/categoria-producto/" + this.editedItem.id + "/"
+                    var item = this.editedItem // variable declarada porque en axios.put los datos del edited item se vacían
                     axios.put(ruta, this.editedItem).then(response => {
-                        Object.assign(this.categorias[this.categorias.indexOf(this.editedItem)], response.data)
+                        Object.assign(this.categorias[this.categorias.indexOf(item)], response.data)
+                        this.value = null
                     })
                         .catch(error => {
                             console.log(error);
                         });
-
                 } else {
                     const ruta = "http://localhost:8000/api/v1.0/categoria-producto/" + this.editedItem.id + "/";
                     axios.delete(ruta).then((response) => {
@@ -199,11 +192,12 @@
                     });
                     const index = this.categorias.indexOf(this.editedItem)
                     this.categorias.splice(index, 1)
+
                 }
-                this.select = this.defaultItem
-                this.editedIndex = -1
                 this.editedItem = this.defaultItem
+                this.editedIndex = -1
                 this.dialog = false
+
             }
         }
     }

@@ -22,10 +22,12 @@
                         ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
-                        <mapp-categorias></mapp-categorias>
+                        <mapp-categorias
+                        ></mapp-categorias>
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
-                        <mapp-accion-producto></mapp-accion-producto>
+                        <mapp-accion-producto
+                        ></mapp-accion-producto>
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
                         <mapp-aplicacion-producto></mapp-aplicacion-producto>
@@ -36,6 +38,7 @@
                                 :items="proveedores"
                                 persistent-hint
                                 return-object
+                                @click:clear='this.proveedor = ""'
                                 item-text="nombre"
                                 hint="Proveedor"
                                 class="mx-4"
@@ -58,7 +61,7 @@
         name: "DatosProducto",
         data() {
             return {
-                proveedor: {nombre : ''},
+                proveedor: {nombre: ''},
                 proveedores: [],
             }
         },
@@ -67,36 +70,52 @@
             const ruta = 'http://localhost:8000/api/v1.0/proveedores/'
             axios.get(ruta).then(response => {
                 this.proveedores = response.data
+                var proveedor = this.$store.state.producto.proveedor
+                if (proveedor.length > 0) {
+                    this.proveedor = this.proveedores.filter(prov => prov.nombre === proveedor)[0]
+                }
             })
                 .catch(error => {
                     console.log(error);
                 });
+
         },
 
         computed: {
             nombre: {
-                get(){
+                get() {
                     return this.$store.state.producto.nombre
                 },
-                set(value){
-                    this.$store.commit('setNombreProducto',value)
+                set(value) {
+                    this.$store.commit('setNombreProducto', value)
                 }
+            },
+
+            acciones: {
+                get() {
+                    return this.$store.state.producto.acciones
+                }
+            }
+        },
+
+        watch: {
+            proveedor: function (val) {
+                if (val != null)
+                    this.$store.commit('setProveedorProducto', val)
+                else
+                    this.$store.commit('setProveedorProducto', {nombre: ''})
             },
         },
 
-        watch : {
-          proveedor(){
-              if (this.proveedor != null)
-                    this.setProveedor(this.proveedor)
-              else {
-                  this.setProveedor({nombre : ''})
-              }
-          }
-        },
-
-        methods : {
-            setProveedor(proveedor){
-                this.$store.commit('setProveedorProducto', proveedor)
+        methods: {
+            cambiarAcciones(event) {
+                if (event != null) {
+                    if (event.length > 0) {
+                        this.$store.commit('setAccionesProducto', event)
+                    } else {
+                        this.$store.commit('setAccionesProducto', [])
+                    }
+                }
             }
         },
 

@@ -26,7 +26,6 @@
                         hint="Acciones"
                         return-object
                         item-text="nombre"
-                        @change="setAcciones(values)"
                 ></v-autocomplete>
             </v-col>
         </v-row>
@@ -83,7 +82,7 @@
         data: () => ({
             items: [],
             value: null,
-            values : [],
+            values: [],
             dialog: false,
             defaultItem: {
                 id: '',
@@ -105,10 +104,18 @@
                 //     this.categorias.push(item.nombre);
                 // });
                 this.items = response.data;
+                var acciones = this.$store.state.producto.acciones
+
+                if (acciones.length > 0) {
+                    for (var i = 0; i < acciones.length; i++) {
+                        this.values.push(this.items.filter(obj => obj.nombre === acciones[i])[0])
+                    }
+                }
             })
                 .catch(error => {
                     console.log(error);
                 });
+
         },
 
         computed: {
@@ -121,22 +128,15 @@
             textoGuardar() {
                 return this.editedIndex === 1 ? 'Sí, Eliminar' : "Guardar"
             },
+        },
 
-            // acciones : {
-            //     get(){
-            //         return this.$store.state.producto.acciones
-            //     },
-            //     set(value){
-            //         this.$store.commit('setAccionesProducto',value)
-            //     }
-            // },
+        watch: {
+            values: function (val) {
+                this.$store.commit('setAccionesProducto', val)
+            },
         },
 
         methods: {
-            setAcciones(acciones){
-              this.$store.commit('setAccionesProducto',acciones)
-            },
-
             agregarAccion() {
                 this.editedIndex = -1
                 this.editedItem = this.defaultItem
@@ -152,7 +152,7 @@
             },
             eliminarAccion() {
                 this.editedIndex = 1
-                if (this.values.length === 1){
+                if (this.values.length === 1) {
                     this.editedItem = this.values[0]
                     this.dialog = true
                 }

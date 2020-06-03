@@ -92,11 +92,13 @@ const store = new Vuex.Store({
         },
 
         setAccionesProducto(state, acciones) {
-            state.producto.acciones = acciones.map(a => a.nombre)
+            var x = acciones.map(a => a.nombre)
+            state.producto.acciones = x
         },
 
         setAplicacionesProducto(state, aplicaciones) {
-            state.producto.aplicaciones = aplicaciones.map(a => a.nombre)
+            var x = aplicaciones.map(a => a.nombre)
+            state.producto.aplicaciones = x
         },
 
         setPresentacionInicial(state) {
