@@ -201,12 +201,6 @@
             },
             
         },
-
-        created() {
-            this.$store.commit('setPresentacionInicial')
-            //this.getProveedor()
-            //this.proveedorId = this.$route.params.proveedorId;
-        },
         methods: {
             // getProveedor(){
             //   const ruta = "http://127.0.0.1:8000/api/v1.0/proveedores/${this.proveedorId}"

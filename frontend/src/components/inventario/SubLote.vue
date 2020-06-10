@@ -41,7 +41,7 @@
             </v-btn>
             <v-btn
                     icon
-                    @click="$emit('eliminarLote',index)"
+                    @click="eliminarSubLote"
             >
                 <v-icon>mdi-delete</v-icon>
             </v-btn>
@@ -57,6 +57,15 @@
             return {
                 fecha_vencimiento: false,
                 picker: new Date().toISOString().substr(0, 10)
+            }
+        },
+
+        created(){
+            var fecha = this.$store.state.producto.presentaciones[this.index_presentacion]
+                        .lotes[this.index].fecha_vencimiento
+            if (fecha.length > 0){
+                this.fecha_vencimiento = true
+                this.picker = new Date(fecha).toISOString().substr(0,10);
             }
         },
 
@@ -110,6 +119,14 @@
         methods: {
             agregarSubLote() {
                 this.$store.commit('agregarLoteVacio', {index: this.index_presentacion})
+            },
+
+            eliminarSubLote() {
+                if (this.$store.state.producto.presentaciones[this.index_presentacion].lotes.length > 1){
+                    this.$store.commit('eliminarSubLote',
+                    {index_presentacion : this.index_presentacion,
+                            index : this.index})
+                }
             }
         }
     }

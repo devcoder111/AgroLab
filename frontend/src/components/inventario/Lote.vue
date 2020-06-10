@@ -23,20 +23,6 @@
 
             </v-container>
         </v-card-text>
-        <v-card-actions>
-            <v-btn
-                    icon
-                    @click="$emit('agregarLote')"
-            >
-                <v-icon>mdi-plus</v-icon>
-            </v-btn>
-            <v-btn
-                    icon
-                    @click="$emit('eliminarLote',index)"
-            >
-                <v-icon>mdi-delete</v-icon>
-            </v-btn>
-        </v-card-actions>
     </v-card>
 </template>
 

@@ -10,10 +10,10 @@
                         ></mapp-tipo-producto>
                     </v-col>
                     <v-col cols="12" sm="12" md="5">
-                        <mapp-unidad-medida
-                                :index="index"
-                                @getDato="setUnidadMedida"
-                        ></mapp-unidad-medida>
+                        <mapp-Unidad-Medida-Presentacion
+                            :index="index"
+                        >
+                        </mapp-Unidad-Medida-Presentacion>
                     </v-col>
                     <v-col cols="12" sm="12" md="2">
                         <v-text-field
@@ -45,7 +45,7 @@
 
 <script>
     import TipoProducto from "./TipoProducto";
-    import UnidadDeMedida from "./UnidadDeMedida";
+    import UnidadMedidaPresentacion from "./UnidadDeMedidaPresentacion";
     import SubPresentacion from "./SubPresentacion";
 
     export default {
@@ -85,15 +85,10 @@
                     this.subPresentaciones.splice(index, 1)
             },
 
-            setUnidadMedida(e) {
-                this.$store.commit(
-                    'setUnidadMedidaPresentacion',
-                    {index: this.index, unidad_medida: e})
-            },
         },
         components: {
             mappTipoProducto: TipoProducto,
-            mappUnidadMedida: UnidadDeMedida,
+            mappUnidadMedidaPresentacion: UnidadMedidaPresentacion,
             mappSubPresentacion: SubPresentacion
         }
     }

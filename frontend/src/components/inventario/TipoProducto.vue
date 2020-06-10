@@ -104,8 +104,11 @@
                 // objectArray.forEach((item) => {
                 //     this.categorias.push(item.nombre);
                 // });
-                console.log(response.data)
                 this.tipos = response.data;
+                var tipoProducto = this.$store.state.producto.presentaciones[this.index].medidas.tipo_producto
+                if (tipoProducto.length > 0){
+                    this.select = this.tipos.filter(tipo => tipo.nombre === tipoProducto)[0]
+                }
             })
                 .catch(error => {
                     console.log(error);

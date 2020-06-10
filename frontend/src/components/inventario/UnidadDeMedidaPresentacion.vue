@@ -76,7 +76,7 @@
 <script>
     import axios from "axios";
     export default {
-        props: ['index_presentacion', 'index'],
+        props : ['index'],
         data() {
             return {
                 dialog: false,
@@ -104,9 +104,8 @@
                 //     this.categorias.push(item.nombre);
                 // });
                 this.medidas = response.data;
-                var unidad_medida = this.$store.state.producto.presentaciones[this.index_presentacion]
-                    .detalle_unitario[this.index].unidad_medida
-                if (unidad_medida.length > 0) {
+                var unidad_medida = this.$store.state.producto.presentaciones[this.index].medidas.unidad_medida
+                if (unidad_medida.length > 0){
                     this.select = this.medidas.filter(med => med.nombre === unidad_medida)[0]
                 }
             })
@@ -134,27 +133,21 @@
 
             select() {
                 this.select != null ? this.editedItem = this.select : this.editedItem = this.defaultItem
-                if (this.select != null) {
-                    this.$store.commit('setUnidadMedidaSubPresentacion',
-                        {
-                            index_presentacion: this.index_presentacion,
-                            index: this.index,
-                            unidad_medida: this.select.nombre
-                        })
-                } else {
-                    this.$store.commit('setUnidadMedidaSubPresentacion',
-                        {
-                            index_presentacion: this.index_presentacion,
-                            index: this.index,
-                            unidad_medida: ''
-                        })
+                if (this.select != null){
+                    this.$store.commit(
+                        'setUnidadMedidaPresentacion',
+                        {index : this.index, unidad_medida : this.select.nombre})
+                }else{
+                    this.$store.commit(
+                        'setUnidadMedidaPresentacion',
+                        {index : this.index, unidad_medida : ''})
                 }
             }
         },
 
         methods: {
             agregarUnidadMedida() {
-                this.editedItem = {'id': '', 'nombre': ''}
+                this.editedItem = {'id' : '', 'nombre' : ''}
                 this.dialog = true
             },
 

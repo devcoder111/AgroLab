@@ -20,9 +20,10 @@
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="6" md="6">
-                                    <mapp-unidad-medida-producto
-                                        @getDato="setUnidadMedidaSubPresentacion"
-                                    ></mapp-unidad-medida-producto>
+                                    <mapp-Unidad-De-Medida
+                                            :index_presentacion="index_presentacion"
+                                            :index="index"
+                                    ></mapp-Unidad-De-Medida>
                                 </v-col>
                                 <v-col cols="12" sm="6" md="6">
                                     <v-text-field
@@ -78,13 +79,6 @@
                 this.$store.commit('eliminarSubPresentacion',
                     {index_presentacion: this.index_presentacion, index: this.index})
             },
-
-            setUnidadMedidaSubPresentacion(e){
-                this.$store.commit('setUnidadMedidaSubPresentacion',
-                    {index_presentacion : this.index_presentacion,
-                            index : this.index,
-                            unidad_medida : e})
-            }
         },
         computed: {
             colorFondo() {
@@ -137,7 +131,7 @@
             },
         },
         components: {
-            mappUnidadMedidaProducto: UnidadDeMedida
+            mappUnidadDeMedida: UnidadDeMedida
         }
     }
 </script>

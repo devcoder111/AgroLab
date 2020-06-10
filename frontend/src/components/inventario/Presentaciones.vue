@@ -71,7 +71,15 @@
         props: ['index'],
         data() {
             return {
-                sub_presentaciones: false
+                sub_presentaciones: false,
+                nuevo: true
+            }
+        },
+
+        created() {
+            this.nuevo = this.$store.state.producto.presentaciones[this.index].detalle_unitario.length == 0;
+            if (!this.nuevo) {
+                this.sub_presentaciones = true
             }
         },
 
@@ -80,63 +88,67 @@
                 return this.$store.state.producto
             },
 
-            nombre : {
-                get(){
+            nombre: {
+                get() {
                     return this.$store.state.producto.presentaciones[this.index].nombre
                 },
-                set(value){
-                    this.$store.commit('setNombrePresentacion',{index : this.index, nombre: value})
+                set(value) {
+                    this.$store.commit('setNombrePresentacion', {index: this.index, nombre: value})
                 }
             },
 
-            precio_compra : {
-                get(){
+            precio_compra: {
+                get() {
                     var precio_compra = this.$store.state.producto.presentaciones[this.index].precio_compra
                     if (isNaN(precio_compra))
                         return ''
                     else
                         return parseFloat(precio_compra)
                 },
-                set(value){
+                set(value) {
                     this.$store.commit(
                         'setPrecioCompraPresentacion',
-                        {index : this.index, precio_compra : value})
+                        {index: this.index, precio_compra: value})
                 }
             },
 
-            precio_venta : {
-                get(){
+            precio_venta: {
+                get() {
                     var precio_venta = this.$store.state.producto.presentaciones[this.index].precio_venta
-                    if(isNaN(precio_venta))
+                    if (isNaN(precio_venta))
                         return ''
                     else
                         return precio_venta
                 },
-                set(value){
+                set(value) {
                     this.$store.commit(
                         'setPrecioVentaPresentacion',
-                        {index : this.index, precio_venta : value})
+                        {index: this.index, precio_venta: value})
                 }
             },
         },
 
-        watch :{
-          sub_presentaciones(){
-              if (this.sub_presentaciones){
-                  this.$store.commit('agregarSubPresentacion',
-                      {index: this.index})
-              }else{
-                  this.$store.commit('eliminarSubPresentaciones',{index : this.index})
-              }
-          }
+        watch: {
+            sub_presentaciones() {
+                if (this.sub_presentaciones) {
+                    if (this.nuevo) {
+                        this.$store.commit('agregarSubPresentacion',
+                            {index: this.index})
+                    }
+                } else {
+                    if (this.nuevo) {
+                        this.$store.commit('eliminarSubPresentaciones', {index: this.index})
+                    }
+                }
+            }
         },
 
-        methods : {
+        methods: {
             agregarPresentacion() {
                 this.$store.commit('agregarPresentacionVacia')
             },
-            eliminarPresentacion(){
-                this.$store.commit('eliminarPresentacion', {index : this.index})
+            eliminarPresentacion() {
+                this.$store.commit('eliminarPresentacion', {index: this.index})
             }
         },
 

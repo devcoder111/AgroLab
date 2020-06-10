@@ -9,7 +9,6 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
-
         producto: {
             nombre: '',
             categoria: '',
@@ -21,25 +20,13 @@ const store = new Vuex.Store({
                     nombre: '',
                     precio_compra: 0,
                     precio_venta: 0,
-                    lotes: [
-                        {
-                            vencimiento: '',
-                            existencia: ''
-                        }
-                    ],
+                    lotes: [],
                     medidas: {
                         tipo_producto: '',
                         unidad_medida: '',
                         cantidad_medida: 0
                     },
-                    detalle_unitario: [
-                        {
-                            cantidad_unitaria: 0,
-                            nombre_sub_presentacion: '',
-                            unidad_medida: '',
-                            precio_unidad: 0
-                        }
-                    ]
+                    detalle_unitario: []
                 }
             ],
         },
@@ -208,8 +195,13 @@ const store = new Vuex.Store({
 
         agregarLoteVacio(state, value){
             state.producto.presentaciones[value.index].lotes.push({
-                existencia : ''
+                existencia : '',
+                fecha_vencimiento : ""
             })
+        },
+
+        eliminarSubLote(state, value){
+            state.producto.presentaciones[value.index_presentacion].lotes.splice(value.index,1);
         },
 
         setFechaVencimientoLote(state, value){
@@ -224,7 +216,7 @@ const store = new Vuex.Store({
 
         setExistenciaLote(state, value){
             state.producto.presentaciones[value.index_presentacion]
-                .lotes[value.index].existencia = value.existencia
+                .lotes[value.index].existencia = parseInt(value.existencia)
         }
     }
 })
