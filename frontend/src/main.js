@@ -66,6 +66,10 @@ const store = new Vuex.Store({
         }
     },
     mutations: {
+        setProducto(state, producto){
+          state.producto = producto
+        },
+
         setNombreProducto(state, nombre) {
             state.producto.nombre = nombre
         },
@@ -196,7 +200,6 @@ const store = new Vuex.Store({
         agregarLoteVacio(state, value){
             state.producto.presentaciones[value.index].lotes.push({
                 existencia : '',
-                fecha_vencimiento : ""
             })
         },
 

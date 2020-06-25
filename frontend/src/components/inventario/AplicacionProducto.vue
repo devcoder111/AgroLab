@@ -182,7 +182,6 @@
                             console.log(error);
                         });
                     this.values = []
-                    this.setAplicaciones([])
                 } else {
                     const ruta = "http://localhost:8000/api/v1.0/aplicacion-producto/" + this.editedItem.id + "/";
                     axios.delete(ruta).then((response) => {
@@ -193,7 +192,6 @@
                     const index = this.items.indexOf(this.editedItem)
                     this.items.splice(index, 1)
                     this.values = []
-                    this.setAplicaciones([])
                 }
                 this.editedIndex = -1
                 this.editedItem = this.defaultItem

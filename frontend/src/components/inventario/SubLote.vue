@@ -60,13 +60,16 @@
             }
         },
 
-        created(){
+        created() {
             var fecha = this.$store.state.producto.presentaciones[this.index_presentacion]
-                        .lotes[this.index].fecha_vencimiento
-            if (fecha.length > 0){
-                this.fecha_vencimiento = true
-                this.picker = new Date(fecha).toISOString().substr(0,10);
+                .lotes[this.index].fecha_vencimiento
+            if (fecha != null) {
+                if (fecha.length > 0) {
+                    this.fecha_vencimiento = true
+                    this.picker = new Date(fecha).toISOString().substr(0, 10);
+                }
             }
+
         },
 
         computed: {
@@ -122,10 +125,12 @@
             },
 
             eliminarSubLote() {
-                if (this.$store.state.producto.presentaciones[this.index_presentacion].lotes.length > 1){
+                if (this.$store.state.producto.presentaciones[this.index_presentacion].lotes.length > 1) {
                     this.$store.commit('eliminarSubLote',
-                    {index_presentacion : this.index_presentacion,
-                            index : this.index})
+                        {
+                            index_presentacion: this.index_presentacion,
+                            index: this.index
+                        })
                 }
             }
         }

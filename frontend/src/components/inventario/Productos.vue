@@ -10,7 +10,7 @@
         >
             <v-data-table
                     :headers="headers"
-                    :items="proveedores"
+                    :items="productos"
                     class="elevation-1"
                     :search="search"
             >
@@ -41,7 +41,7 @@
                                     <v-toolbar-title>{{formTitle}}</v-toolbar-title>
                                     <v-spacer></v-spacer>
                                     <v-toolbar-items>
-                                        <v-btn dark text @click="dialog = false">Guardar</v-btn>
+                                        <v-btn dark text @click="save">Guardar</v-btn>
                                     </v-toolbar-items>
                                     <v-tabs
                                             slot="extension"
@@ -78,7 +78,7 @@
                                     <v-tab-item
                                             key="3"
                                     >
-                                                <mapp-lotes></mapp-lotes>
+                                        <mapp-lotes></mapp-lotes>
 
                                     </v-tab-item>
                                 </v-tabs-items>
@@ -139,48 +139,25 @@
 
     export default {
         data: () => ({
-            //proveedorId : 0,
-
+            id_producto : '',
             tab: null,
             nombresTabs: ['Básico', 'Presentaciones', 'Lotes'],
             tabs: 0,
             snackbar: false,
             search: '',
-            search_proveedor: '',
+            search_producto: '',
             dialog: false,
             headers: [
                 {text: 'ID', value: 'id'},
                 {text: 'Nombre', value: 'nombre',},
-                {text: 'Dirección', value: 'direccion'},
-                {text: 'Teléfono', value: 'telefono'},
-                {text: 'Banco', value: 'nombre_banco'},
-                {text: 'Cuenta', value: 'no_cuenta'},
-                {text: 'Vendedor', value: 'nombre_vendedor'},
-                {text: 'Tel Vendedor', value: 'telefono_vendedor'},
+                {text: 'Categoria', value: 'categoria'},
+                {text: 'Proveedor', value: 'proveedor'},
+                {text: 'Acciones', value: 'acciones'},
+                {text: 'Aplicaciones', value: 'aplicaciones'},
                 {text: 'Acciones', value: 'actions', sortable: false},
             ],
-            proveedores: [],
+            productos: [],
             editedIndex: -1,
-            editedItem: {
-                id: '',
-                nombre: '',
-                direccion: '',
-                telefono: '',
-                nombre_banco: '',
-                no_cuenta: '',
-                nombre_vendedor: '',
-                telefono_vendedor: ''
-            },
-            defaultItem: {
-                id: '',
-                nombre: '',
-                direccion: '',
-                telefono: '',
-                nombre_banco: '',
-                no_cuenta: '',
-                nombre_vendedor: '',
-                telefono_vendedor: ''
-            },
         }),
 
         computed: {
@@ -195,69 +172,74 @@
             }
         },
 
+        created(){
+          this.initialize();
+        },
+
         watch: {
             dialog(val) {
                 val || this.close()
             },
-            
+
         },
         methods: {
-            // getProveedor(){
-            //   const ruta = "http://127.0.0.1:8000/api/v1.0/proveedores/${this.proveedorId}"
-            //     axios.get(ruta).then(response => {
-            //        console.log(response.data.nombre);
-            //
-            //     }).catch(error => {
-            //        console.log(error);
-            //     });
-            // },
-
+            initialize() {
+                const ruta = 'http://localhost:8000/api/v1.0/producto/'
+                axios.get(ruta).then(response => {
+                    this.productos = response.data
+                })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            },
 
 
             confirmarEliminar(item) {
                 this.snackbar = true;
-                this.editedItem = Object.assign({}, item)
+                this.id_producto = item.id
             },
 
             editItem(item) {
-                this.editedIndex = this.proveedores.indexOf(item)
-                this.editedItem = Object.assign({}, item)
+                this.editedIndex = this.productos.indexOf(item)
+                this.id_producto = item.id
+                this.$store.commit('setProducto',item)
+                console.log(JSON.stringify(this.$store.state.producto))
                 this.dialog = true
             },
 
             deleteItem() {
-                const ruta = "http://localhost:8000/api/v1.0/proveedores/" + this.editedItem.id + "/";
+                const ruta = "http://localhost:8000/api/v1.0/producto/" + this.id_producto + "/";
                 axios.delete(ruta).then((response) => {
                     console.log(response.data);
                 }).catch((error) => {
                     console.log(error);
                 });
-                const index = this.proveedores.indexOf(this.editedItem)
-                this.proveedores.splice(index, 1)
+                const index = this.productos.indexOf(this.productos.find(pro => pro.id === this.id_producto))
+                this.productos.splice(index, 1)
                 this.snackbar = false
             },
 
             close() {
                 this.dialog = false
                 setTimeout(() => {
-                    this.editedItem = Object.assign({}, this.defaultItem)
                     this.editedIndex = -1
                 }, 300)
             },
 
             save() {
                 if (this.editedIndex > -1) {
-                    const ruta = 'http://localhost:8000/api/v1.0/proveedores/' + this.editedItem.id + "/"
-                    axios.put(ruta, this.editedItem).then(response => {
-                        Object.assign(this.proveedores[this.editedIndex], response.data)
+                    const ruta = 'http://localhost:8000/api/v1.0/producto/' + this.id_producto + "/"
+                    axios.put(ruta, this.$store.state.producto).then(response => {
+                        Object.assign(this.productos[this.editedIndex], response.data)
                     })
-                        .catch(error => {
-                            console.log(error);
-                        });
+                    .catch(error => {
+                        console.log(error);
+                    });
                 } else {
-                    const ruta = 'http://localhost:8000/api/v1.0/proveedores/'
-                    axios.post(ruta, this.editedItem).then((response) => {
-                        this.proveedores.push(response.data);
+                    const ruta = 'http://localhost:8000/api/v1.0/producto/'
+                    console.log(JSON.stringify(this.$store.state.producto))
+                    axios.post(ruta, this.$store.state.producto).then((response) => {
+                        this.productos.push(response.data);
                     }).catch((error) => {
                         console.log(error);
                     });

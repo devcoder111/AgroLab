@@ -67,7 +67,7 @@
         },
 
         created() {
-            const ruta = 'http://localhost:8000/api/v1.0/proveedores/'
+            const ruta = 'http://localhost:8000/api/v1.0/proveedor-producto/'
             axios.get(ruta).then(response => {
                 this.proveedores = response.data
                 var proveedor = this.$store.state.producto.proveedor

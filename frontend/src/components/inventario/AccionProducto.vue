@@ -159,9 +159,9 @@
             },
 
             cerrar() {
+                this.dialog = false
                 this.editedIndex = -1
                 this.editedItem = this.defaultItem
-                this.dialog = false
             },
 
             guardar() {
@@ -181,7 +181,6 @@
                             console.log(error);
                         });
                     this.values = []
-                    this.setAcciones([])
                 } else {
                     const ruta = "http://localhost:8000/api/v1.0/accion-producto/" + this.editedItem.id + "/";
                     axios.delete(ruta).then((response) => {
@@ -192,11 +191,8 @@
                     const index = this.items.indexOf(this.editedItem)
                     this.items.splice(index, 1)
                     this.values = []
-                    this.setAcciones([])
                 }
-                this.editedIndex = -1
-                this.editedItem = this.defaultItem
-                this.dialog = false
+                this.cerrar()
             }
         }
     }

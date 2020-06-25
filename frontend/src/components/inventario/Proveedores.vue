@@ -11,7 +11,6 @@
             <v-data-table
                     :headers="headers"
                     :items="proveedores"
-                    sort-by="calories"
                     class="elevation-1"
                     :search="search"
             >
@@ -162,7 +161,6 @@
     import axios from 'axios';
     export default {
         data: () => ({
-            //proveedorId : 0,
             snackbar : false,
             search: '',
             dialog: false,
@@ -221,7 +219,7 @@
 
         methods: {
             initialize() {
-                const ruta = 'http://localhost:8000/api/v1.0/proveedores/'
+                const ruta = 'http://localhost:8000/api/v1.0/proveedor-producto/'
                 axios.get(ruta).then(response => {
                     this.proveedores = response.data
                 })
@@ -252,7 +250,7 @@
             },
 
             deleteItem() {
-                const ruta = "http://localhost:8000/api/v1.0/proveedores/" + this.editedItem.id + "/";
+                const ruta = "http://localhost:8000/api/v1.0/proveedor-producto/" + this.editedItem.id + "/";
                 axios.delete(ruta).then((response) => {
                     console.log(response.data);
                 }).catch((error) => {
@@ -273,7 +271,7 @@
 
             save() {
                 if (this.editedIndex > -1) {
-                    const ruta = 'http://localhost:8000/api/v1.0/proveedores/' + this.editedItem.id + "/"
+                    const ruta = 'http://localhost:8000/api/v1.0/proveedor-producto/' + this.editedItem.id + "/"
                     axios.put(ruta, this.editedItem).then(response => {
                         Object.assign(this.proveedores[this.editedIndex], response.data)
                     })
@@ -281,7 +279,7 @@
                         console.log(error);
                     });
                 } else {
-                    const ruta = 'http://localhost:8000/api/v1.0/proveedores/'
+                    const ruta = 'http://localhost:8000/api/v1.0/proveedor-producto/'
                     axios.post(ruta, this.editedItem).then((response) => {
                         this.proveedores.push(response.data);
                     }).catch((error) => {

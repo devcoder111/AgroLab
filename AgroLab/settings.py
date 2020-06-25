@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'sk4h6dzc@*(3uzyim-(7%@1q_11#73dlliz-12an0l#wr7#_du'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -45,6 +43,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'inventario',
     'rest_framework',
+    'rest_framework_mongoengine',
+    'django_mongoengine',
+    'django_mongoengine.mongo_auth',
+    'django_mongoengine.mongo_admin',
     'corsheaders'
 ]
 
@@ -79,21 +81,23 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'AgroLab.wsgi.application'
-
-
+MONGOADMIN_OVERRIDE_ADMIN = True
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+
+MONGODB_DATABASES = {
+    'default' : {'name' : 'agropecuaria'}
+}
 
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'agropecuaria',
-        'HOST' : 'mongodb://upvhas:rock55241795@localhost:27017/agropecuaria',
-        'USER' : 'upvhas',
-        'PASSWORD' : 'rock55241795',
+        'HOST': 'mongodb://upvhas:rock55241795@localhost:27017/agropecuaria',
+        'USER': 'upvhas',
+        'PASSWORD': 'rock55241795',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -113,11 +117,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'UTC'
 
@@ -127,8 +130,14 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFIELDS_DIRS = (
+    os.path.join(BASE_DIR,"AgroLab","static")
+)
+
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_URL = '/media/'
